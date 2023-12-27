@@ -20,6 +20,8 @@ return {
 
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
+    "mfussenegger/nvim-dap-python",
+
   },
   config = function()
     local dap = require 'dap'
@@ -44,13 +46,15 @@ return {
 
     -- Basic debugging keymaps, feel free to change to your liking!
     vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
-    vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })
-    vim.keymap.set('n', '<F2>', dap.step_over, { desc = 'Debug: Step Over' })
-    vim.keymap.set('n', '<F3>', dap.step_out, { desc = 'Debug: Step Out' })
+    vim.keymap.set('n', '<F7>', dap.step_into, { desc = 'Debug: Step Into' })
+    vim.keymap.set('n', '<F10>', dap.step_over, { desc = 'Debug: Step Over' })
+    vim.keymap.set('n', '<F12>', dap.step_out, { desc = 'Debug: Step Out' })
     vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
     vim.keymap.set('n', '<leader>B', function()
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
     end, { desc = 'Debug: Set Breakpoint' })
+    vim.keymap.set("n", "<Leader>dr", dap.repl.open, { desc = 'Debug: Toggle repl windows' })
+    vim.keymap.set("n", "<Leader>du", dapui.toggle, { desc = "Toggle the DAP UI" })
 
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
@@ -83,5 +87,23 @@ return {
 
     -- Install golang specific config
     require('dap-go').setup()
+
+    -- python specific config
+
+    local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
+    local dap_python = require("dap-python")
+    dap_python.setup(path)
+    vim.keymap.set(
+      "n",
+      "<leader>tc",
+      "<cmd>lua require('dap-python').test_class()<CR>",
+      { noremap = true, silent = true, desc = "test python class" }
+    )
+    vim.keymap.set(
+      "n",
+      "<leader>tm",
+      "<cmd>lua require('dap-python').test_method()<CR>",
+      { noremap = true, silent = true, desc = "test python function" }
+    )
   end,
 }
