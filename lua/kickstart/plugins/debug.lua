@@ -14,6 +14,9 @@ return {
     -- Creates a beautiful debugger UI
     'rcarriga/nvim-dap-ui',
 
+    -- virtual text for debuggers
+    "theHamsta/nvim-dap-virtual-text",
+
     -- Installs the debug adapters for you
     'williamboman/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
@@ -26,6 +29,56 @@ return {
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
+
+    dap.configurations.python = {
+      {
+        -- The first three options are required by nvim-dap
+        type = "python", -- the type here established the link to the adapter definition: `dap.adapters.python`
+        request = "launch",
+        name = "Launch file",
+        cwd = vim.fn.getcwd(), --python is executed from this directory
+
+        program = "${file}",   -- This configuration will launch the current file if used.
+        pythonPath = function()
+          -- debugpy supports launching an application with a different interpreter then the one used to
+          -- launch debugpy itself.
+          -- The code below looks for a `venv` or `.venv` folder in the current directly and uses the python within.
+          -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
+          local cwd = vim.fn.getcwd()
+          if vim.fn.executable(cwd .. "python") == 1 then
+            return cwd .. "python"
+          elseif vim.fn.executable(cwd .. "python") == 1 then
+            return cwd .. "python"
+          else
+            return "python"
+          end
+        end,
+      },
+    }
+    dap.adapters.lldb = {
+      type = 'executable',
+      command = '/opt/homebrew/opt/llvm/bin/lldb-vscode',
+      env = {
+        LLDB_LAUNCH_FLAG_LAUNCH_IN_TTY = "YES"
+      },
+      name = "lldb"
+    }
+    dap.configurations.cpp = {
+      {
+        name = "Launch",
+        type = "lldb",
+        request = "launch",
+        program = function()
+          print(vim.fn.expand('%:r'))
+          -- return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+          return vim.fn.expand('%:r')
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = {},
+        runInTerminal = true,
+      }
+    }
 
     require('mason-nvim-dap').setup {
       -- Makes a best effort to setup the various debuggers with
@@ -41,7 +94,14 @@ return {
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
+        "gdb",
+        "lldb",
+        "node",
+        "python",
+        "codelldb",
+        "cpptools"
       },
+      automatic_installation = true,
     }
 
     -- Basic debugging keymaps, feel free to change to your liking!
@@ -54,7 +114,7 @@ return {
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
     end, { desc = 'Debug: Set Breakpoint' })
     vim.keymap.set("n", "<Leader>dr", dap.repl.open, { desc = 'Debug: Toggle repl windows' })
-    vim.keymap.set("n", "<Leader>du", dapui.toggle, { desc = "Toggle the DAP UI" })
+    vim.keymap.set("n", "<Leader>dl", dap.run_last, { desc = "Debug: Run last execution" })
 
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
@@ -78,8 +138,12 @@ return {
       },
     }
 
+
+    require("nvim-dap-virtual-text").setup({})
+
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
-    vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
+    vim.keymap.set('n', '<F4>', dapui.toggle, { desc = 'Debug: See last session result.' })
+    vim.keymap.set("n", "<Leader>du", dapui.toggle, { desc = "Toggle the DAP UI" })
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
