@@ -302,6 +302,10 @@ vim.wo.number = true
 -- Enable mouse mode
 vim.o.mouse = 'a'
 
+-- Copilot fix for mapped tab
+vim.g.copilot_assume_mapped = true
+
+
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
@@ -603,7 +607,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('H', vim.lsp.buf.signature_help, 'Signature Documentation')
+  keymap.set({ 'v', 'i' }, '<leader>H', vim.lsp.buf.signature_help, { desc = 'Signature Documentation' })
 
   -- Lesser used LSP functionality
   nmap('<leader>rs', ":LspRestart<CR>", { desc = "LSP [r]e[s]tart" })
@@ -745,6 +749,8 @@ rt.setup({
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
+-- require('luasnip.loaders.from_vscode').lazy_load({ paths = { "./snippets" } })
+require('luasnip.loaders.from_snipmate').lazy_load({ paths = { "./snippets/" } })
 luasnip.config.setup {}
 
 cmp.setup {
@@ -755,6 +761,19 @@ cmp.setup {
   },
   completion = {
     completeopt = 'menu,menuone,noinsert',
+  },
+  window = {
+    completion = cmp.config.window.bordered({
+      border = "double",
+      winhighlight = "Normal:Normal,FloatBorder:BorderBG,CursorLine:PmenuSel,Search:None",
+    })
+  },
+  formatting = {
+    format = function(_, vim_item)
+      vim_item.abbr = ' ' .. vim_item.abbr
+      vim_item.menu = (vim_item.menu or '') .. ' '
+      return vim_item
+    end
   },
   mapping = cmp.mapping.preset.insert {
     ['<C-n>'] = cmp.mapping.select_next_item(),
@@ -767,10 +786,13 @@ cmp.setup {
       select = true,
     },
     ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
+      local copilot_keys = vim.fn['copilot#Accept']()
+      -- if cmp.visible() then
+      -- cmp.select_next_item()
+      if luasnip.expand_or_locally_jumpable() then
         luasnip.expand_or_jump()
+      elseif copilot_keys ~= '' and type(copilot_keys) == 'string' then
+        vim.api.nvim_feedkeys(copilot_keys, 'i', true)
       else
         fallback()
       end

@@ -113,7 +113,7 @@ return {
     vim.keymap.set('n', '<leader>B', function()
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
     end, { desc = 'Debug: Set Breakpoint' })
-    vim.keymap.set("n", "<Leader>dr", dap.repl.open, { desc = 'Debug: Toggle repl windows' })
+    vim.keymap.set("n", "<Leader>dr", dap.repl.toggle, { desc = 'Debug: Toggle repl windows' })
     vim.keymap.set("n", "<Leader>dl", dap.run_last, { desc = "Debug: Run last execution" })
 
     -- Dap UI setup

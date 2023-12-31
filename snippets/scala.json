@@ -1,0 +1,11 @@
+{
+  "def_main": {
+    "prefix": "def_main",
+    "body": [
+      "def main(args: Array[String]): Unit = {",
+      "\t${2:println(\"Hello, world!\")}",
+      "}"
+    ],
+    "description": "main method"
+  }
+}
