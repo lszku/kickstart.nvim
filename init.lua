@@ -118,6 +118,12 @@ require('lazy').setup({
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',  opts = {} },
   {
+    "ray-x/lsp_signature.nvim",
+    event = "VeryLazy",
+    opts = {},
+    config = function(_, opts) require 'lsp_signature'.setup(opts) end
+  },
+  {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -607,7 +613,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  keymap.set({ 'v', 'i' }, '<leader>H', vim.lsp.buf.signature_help, { desc = 'Signature Documentation' })
+  keymap.set("n", 'L', vim.lsp.buf.signature_help, { desc = 'Signature Documentation' })
 
   -- Lesser used LSP functionality
   nmap('<leader>rs', ":LspRestart<CR>", { desc = "LSP [r]e[s]tart" })
@@ -688,6 +694,10 @@ local servers = {
   },
 }
 
+-- signature lsp configuration
+local signature_config = {}
+require('lsp_signature').on_attach(signature_config)
+
 -- Setup neovim lua configuration
 require('neodev').setup()
 
@@ -752,6 +762,7 @@ require('luasnip.loaders.from_vscode').lazy_load()
 -- require('luasnip.loaders.from_vscode').lazy_load({ paths = { "./snippets" } })
 require('luasnip.loaders.from_snipmate').lazy_load({ paths = { "./snippets/" } })
 luasnip.config.setup {}
+
 
 cmp.setup {
   snippet = {
