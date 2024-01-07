@@ -112,17 +112,20 @@ require('lazy').setup({
 
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
+
+      -- signature help
+      'hrsh7th/cmp-nvim-lsp-signature-help',
     },
   },
 
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',  opts = {} },
-  {
-    "ray-x/lsp_signature.nvim",
-    event = "VeryLazy",
-    opts = {},
-    config = function(_, opts) require 'lsp_signature'.setup(opts) end
-  },
+  -- {
+  --   "ray-x/lsp_signature.nvim",
+  --   event = "VeryLazy",
+  --   opts = {},
+  --   config = function(_, opts) require 'lsp_signature'.setup(opts) end
+  -- },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -206,7 +209,8 @@ require('lazy').setup({
       "folke/tokyonight.nvim",
       'Mofiqul/dracula.nvim',
       'lifepillar/vim-solarized8',
-      "olimorris/onedarkpro.nvim"
+      "olimorris/onedarkpro.nvim",
+      "nyoom-engineering/oxocarbon.nvim"
     },
     priority = 1000,
     config = function()
@@ -225,9 +229,19 @@ require('lazy').setup({
         component_separators = '|',
         section_separators = '',
       },
+      sections = {
+        lualine_x = {
+          -- {
+          --   "filename",
+          --   path = 1,
+          -- },
+          { 'location' },
+          { "encoding" },
+          { "filetype" },
+        },
+      },
     },
   },
-
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
@@ -592,8 +606,18 @@ local on_attach = function(_, bufnr)
   -- In this case, we create a function that lets us more easily define mappings specific
   -- for LSP related items. It sets the mode, buffer and description for us each time.
   local nmap = function(keys, func, desc)
-    if desc then
-      desc = 'LSP: ' .. desc
+    local desc_str = nil
+    if type(desc) == 'table' then
+      local success, table_str = pcall(vim.inspect, desc)
+      if success then
+        desc_str = table_str
+      end
+    elseif type(desc) == 'string' then
+      desc_str = desc
+    end
+
+    if desc_str then
+      desc = 'LSP: ' .. desc_str
     end
 
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
@@ -695,8 +719,10 @@ local servers = {
 }
 
 -- signature lsp configuration
-local signature_config = {}
-require('lsp_signature').on_attach(signature_config)
+-- local signature_config = {
+--
+-- }
+-- require('lsp_signature').on_attach(signature_config)
 
 -- Setup neovim lua configuration
 require('neodev').setup()
@@ -773,12 +799,12 @@ cmp.setup {
   completion = {
     completeopt = 'menu,menuone,noinsert',
   },
-  window = {
-    completion = cmp.config.window.bordered({
-      border = "double",
-      winhighlight = "Normal:Normal,FloatBorder:BorderBG,CursorLine:PmenuSel,Search:None",
-    })
-  },
+  -- window = {
+  --   completion = cmp.config.window.bordered({
+  --     border = "double",
+  --     winhighlight = "Normal:Normal,FloatBorder:BorderBG,CursorLine:PmenuSel,Search:None",
+  --   })
+  -- },
   formatting = {
     format = function(_, vim_item)
       vim_item.abbr = ' ' .. vim_item.abbr
@@ -796,6 +822,7 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
+    -- ['<Tab>'] = cmp.mapping({ 'i', 's' }, function(fallback)
     ['<Tab>'] = cmp.mapping(function(fallback)
       local copilot_keys = vim.fn['copilot#Accept']()
       -- if cmp.visible() then
@@ -807,7 +834,7 @@ cmp.setup {
       else
         fallback()
       end
-    end, { 'i', 's' }),
+    end),
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
@@ -819,9 +846,22 @@ cmp.setup {
     end, { 'i', 's' }),
   },
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-    { name = 'path' },
+    { name = "nvim_lsp_signature_help", max_item_count = 10 },
+    { name = "nvim_lsp",                max_item_count = 20 },
+    { name = "luasnip",                 max_item_count = 10 },
+    { name = "nvim_lua",                max_item_count = 10 },
+    { name = "path",                    max_item_count = 5 },
+    { name = "buffer",                  keyword_length = 2, max_item_count = 5, group_index = 2 },
+    -- { name = "nvim_lsp_signature_help", group_index = 1 },
+    -- { name = "nvim_lsp",                max_item_count = 20, group_index = 1 },
+    -- { name = "luasnip",                 max_item_count = 5,  group_index = 2 },
+    -- { name = "nvim_lua",                group_index = 1 },
+    -- { name = "path",                    group_index = 2 },
+    -- { name = "buffer",                  keyword_length = 2,  max_item_count = 5, group_index = 2 },
+    -- { name = 'nvim_lsp_signature_help' },
+    -- { name = 'nvim_lsp' },
+    -- { name = 'luasnip' },
+    -- { name = 'path' },
   },
 }
 

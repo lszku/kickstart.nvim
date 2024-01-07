@@ -6,7 +6,7 @@ return {
     iron.setup({
       config = {
         -- Whether a repl should be discarded or not
-        scratch_repl = true,
+        scratch_repl = false,
 
         -- Highlights the last sent block with bold
         highlight_last = "IronLastSent",
@@ -43,7 +43,7 @@ return {
         mark_motion = "<leader>cc",
         mark_visual = "<leader>cc",
         remove_mark = "<leader>cd",
-        cr = "<leader>s<cr>",
+        cr = "<leader>c<cr>",
         interrupt = "<leader>c<leader>",
         exit = "<leader>cq",
         clear = "<leader>cl",
