@@ -36,9 +36,10 @@ return {
         type = "python", -- the type here established the link to the adapter definition: `dap.adapters.python`
         request = "launch",
         name = "Launch file",
-        cwd = vim.fn.getcwd(), --python is executed from this directory
+        cwd = vim.fn.getcwd(),       --python is executed from this directory
+        console = "internalConsole", -- print output to integrated terminal
 
-        program = "${file}",   -- This configuration will launch the current file if used.
+        program = "${file}",         -- This configuration will launch the current file if used.
         pythonPath = function()
           -- debugpy supports launching an application with a different interpreter then the one used to
           -- launch debugpy itself.

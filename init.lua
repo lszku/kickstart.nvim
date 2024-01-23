@@ -115,6 +115,9 @@ require('lazy').setup({
 
       -- signature help
       'hrsh7th/cmp-nvim-lsp-signature-help',
+
+      -- github copilot
+      -- 'github/copilot.vim',
     },
   },
 
@@ -413,6 +416,9 @@ keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" }
 -- noremap([[<M-j>]], [[<C-\><C-n><C-w>j]])
 -- noremap([[<M-k>]], [[<C-\><C-n><C-w>k]])
 -- noremap([[<M-l>]], [[<C-\><C-n><C-w>l]])
+
+-- escape terminal mode with <Esc>
+keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode with <Esc>" })
 
 keymap.set('n', '<C-h>', '<C-w>h', { desc = "Go to split left" })
 keymap.set('n', '<C-l>', '<C-w>l', { desc = "Go to split right" })
@@ -779,7 +785,6 @@ rt.setup({
 })
 -- end for rust tools configuration
 
-
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
 local cmp = require 'cmp'
@@ -824,16 +829,23 @@ cmp.setup {
     },
     -- ['<Tab>'] = cmp.mapping({ 'i', 's' }, function(fallback)
     ['<Tab>'] = cmp.mapping(function(fallback)
-      local copilot_keys = vim.fn['copilot#Accept']()
-      -- if cmp.visible() then
-      -- cmp.select_next_item()
-      if luasnip.expand_or_locally_jumpable() then
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_locally_jumpable() then
         luasnip.expand_or_jump()
-      elseif copilot_keys ~= '' and type(copilot_keys) == 'string' then
-        vim.api.nvim_feedkeys(copilot_keys, 'i', true)
       else
         fallback()
       end
+      -- local copilot_keys = vim.fn['copilot#Accept']()
+      -- if cmp.visible() then
+      -- cmp.select_next_item()
+      -- if luasnip.expand_or_locally_jumpable() then
+      --   luasnip.expand_or_jump()
+      -- elseif copilot_keys ~= '' and type(copilot_keys) == 'string' then
+      -- vim.api.nvim_feedkeys(copilot_keys, 'i', true)
+      -- else
+      --   fallback()
+      -- end
     end),
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -864,6 +876,7 @@ cmp.setup {
     -- { name = 'path' },
   },
 }
+
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
