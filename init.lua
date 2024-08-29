@@ -328,6 +328,9 @@ vim.o.mouse = 'a'
 -- Copilot fix for mapped tab
 vim.g.copilot_assume_mapped = true
 
+-- spelling and corrections
+vim.opt.spelllang = 'en_us'
+vim.opt.spell = true
 
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -343,6 +346,10 @@ vim.o.undofile = true
 -- Case-insensitive searching UNLESS \C or capital in search
 vim.o.ignorecase = true
 vim.o.smartcase = true
+
+
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
 
 -- Keep signcolumn on by default
 vim.wo.signcolumn = 'yes'
