@@ -8,7 +8,7 @@ Kickstart.nvim is *not* a distribution.
 
 Kickstart.nvim is a template for your own configuration.
   The goal is that you can read every line of code, top-to-bottom, understand
-  what your configuration is doing, and modify it to suit your needs.
+what your configuration is doing, and modify it to suit your needs.
 
   Once you've done that, you should start exploring, configuring and tinkering to
   explore Neovim!
@@ -94,7 +94,14 @@ require('lazy').setup({
       'folke/neodev.nvim',
 
       -- rust tools
-      'simrat39/rust-tools.nvim',
+      'mrcjkb/rustaceanvim',
+      version = '^5', -- Recommended
+      lazy = false,   -- This plugin is already lazy
+      ['rust-analyzer'] = {
+        cargo = {
+          allFeatures = true,
+        },
+      }
     },
   },
 
@@ -544,7 +551,7 @@ vim.keymap.set("n", "<leader>gt", "<cmd>LazyGit<cr>", { desc = "Open lazygit" })
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
     ignore_install = {},
     sync_install = true,
 
@@ -710,7 +717,7 @@ local servers = {
   clangd = {},
   gopls = {},
   pyright = {},
-  rust_analyzer = {},
+  -- rust_analyzer = {},
   tsserver = {},
   html = { filetypes = { 'html', 'twig', 'hbs' } },
   cssls = {},
@@ -770,26 +777,26 @@ mason_lspconfig.setup_handlers {
 }
 
 -- rust tools configuration
-local rt = require('rust-tools')
-rt.setup({
-  server = {
-    standalone = true,
-    capabilities = require("cmp_nvim_lsp").default_capabilities(),
-    on_attach = on_attach,
-    root_dir = require("lspconfig/util").root_pattern("Cargo.toml"),
-    settings = {
-      ["rust_analyzer"] = { cargo = { allFeatures = true } },
-    },
-    init_options = { statusBarProvider = "on" },
-    dap = {
-      adapter = {
-        type = "executable",
-        command = "lldb-vscode",
-        name = "rt_lldb",
-      },
-    },
-  }
-})
+-- local rt = require('rust-tools')
+-- rt.setup({
+--   server = {
+--     standalone = true,
+--     capabilities = require("cmp_nvim_lsp").default_capabilities(),
+--     on_attach = on_attach,
+--     root_dir = require("lspconfig/util").root_pattern("Cargo.toml"),
+--     settings = {
+--       ["rust_analyzer"] = { cargo = { allFeatures = true } },
+--     },
+--     init_options = { statusBarProvider = "on" },
+--     dap = {
+--       adapter = {
+--         type = "executable",
+--         command = "lldb-vscode",
+--         name = "rt_lldb",
+--       },
+--     },
+--   }
+-- })
 -- end for rust tools configuration
 
 -- [[ Configure nvim-cmp ]]
