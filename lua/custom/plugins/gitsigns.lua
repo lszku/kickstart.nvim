@@ -71,7 +71,7 @@ return {
     map('n', '<leader>HS', gs.stage_buffer)
     map('n', '<leader>Hu', gs.undo_stage_hunk)
     map('n', '<leader>HR', gs.reset_buffer)
-    map('n', '<leader>Hp', gs.preview_hunk)
+    map('n', '<leader>gp', gs.preview_hunk)
     map('n', '<leader>Hb', function() gs.blame_line { full = true } end)
     map('n', '<leader>tb', gs.toggle_current_line_blame)
     map('n', '<leader>Hd', gs.diffthis)
