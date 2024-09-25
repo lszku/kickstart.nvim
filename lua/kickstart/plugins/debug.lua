@@ -155,7 +155,8 @@ return {
 
     -- python specific config
 
-    local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
+    -- local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
+    local path = 'python'
     local dap_python = require("dap-python")
     dap_python.setup(path)
     dap_python.test_runner = "pytest"
