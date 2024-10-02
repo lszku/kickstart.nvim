@@ -454,6 +454,11 @@ keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer
 
 keymap.set({ "n", "i" }, "<C-s>", "<Esc>:w<CR>", { desc = "Save the current buffer" })
 
+-- custom functions
+require('custom.functions.switch_case')
+vim.api.nvim_set_keymap('n', 'cs', '<cmd>lua require("custom.functions.switch_case").switch_case()<CR>',
+  { noremap = true, silent = true })
+
 
 
 -- [[ Highlight on yank ]]
