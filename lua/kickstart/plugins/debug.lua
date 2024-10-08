@@ -147,8 +147,13 @@ return {
     vim.keymap.set("n", "<Leader>du", dapui.toggle, { desc = "Toggle the DAP UI" })
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-    dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-    dap.listeners.before.event_exited['dapui_config'] = dapui.close
+    -- dap.listeners.before.event_terminated['dapui_config'] = dapui.close
+    dap.listeners.before.event_exited['dapui_config'] = function()
+      dapui.close()
+      dap.repl.open()
+      vim.cmd('resize ' .. math.floor(vim.o.lines * 2 / 3))
+    end
+
 
     -- Install golang specific config
     require('dap-go').setup()
