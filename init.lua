@@ -231,7 +231,7 @@ require('lazy').setup({
     },
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'onedark_vivid'
+      vim.cmd.colorscheme 'catppuccin-macchiato'
     end,
   },
 
