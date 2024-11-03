@@ -454,6 +454,11 @@ keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer
 
 keymap.set({ "n", "i" }, "<C-s>", "<Esc>:w<CR>", { desc = "Save the current buffer" })
 
+
+-- remap movement to center the screen
+keymap.set('n', "<C-u>", "<C-u>zz", { desc = "Half of the page up" })
+keymap.set('n', "<C-n>", "<C-n>zz", { desc = "Half of the page down" })
+
 -- custom functions
 require('custom.functions.switch_case')
 vim.api.nvim_set_keymap('n', 'cs', '<cmd>lua require("custom.functions.switch_case").switch_case()<CR>',
