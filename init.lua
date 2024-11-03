@@ -568,7 +568,7 @@ vim.keymap.set("n", "<leader>gt", "<cmd>LazyGit<cr>", { desc = "Open lazygit" })
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', },
     ignore_install = {},
     sync_install = true,
 
