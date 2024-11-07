@@ -9,24 +9,16 @@ return {
     local set = vim.keymap.set
 
     -- Add or skip cursor above/below the main cursor.
-    set({ "n", "v" }, "<up>",
-      function() mc.lineAddCursor(-1) end)
-    set({ "n", "v" }, "<down>",
-      function() mc.lineAddCursor(1) end)
-    set({ "n", "v" }, "<leader><up>",
-      function() mc.lineSkipCursor(-1) end)
-    set({ "n", "v" }, "<leader><down>",
-      function() mc.lineSkipCursor(1) end)
+    set({ "n", "v" }, "<up>", function() mc.lineAddCursor(-1) end)
+    set({ "n", "v" }, "<down>", function() mc.lineAddCursor(1) end)
+    set({ "n", "v" }, "<leader><up>", function() mc.lineSkipCursor(-1) end)
+    set({ "n", "v" }, "<leader><down>", function() mc.lineSkipCursor(1) end)
 
     -- Add or skip adding a new cursor by matching word/selection
-    set({ "n", "v" }, "<leader>n",
-      function() mc.matchAddCursor(1) end)
-    set({ "n", "v" }, "<leader>s",
-      function() mc.matchSkipCursor(1) end)
-    set({ "n", "v" }, "<leader>N",
-      function() mc.matchAddCursor(-1) end)
-    set({ "n", "v" }, "<leader>S",
-      function() mc.matchSkipCursor(-1) end)
+    set({ "n", "v" }, "<leader>n", function() mc.matchAddCursor(1) end)
+    set({ "n", "v" }, "<leader>s", function() mc.matchSkipCursor(1) end)
+    set({ "n", "v" }, "<leader>N", function() mc.matchAddCursor(-1) end)
+    set({ "n", "v" }, "<leader>S", function() mc.matchSkipCursor(-1) end)
 
     -- Add all matches in the document
     set({ "n", "v" }, "<leader>A", mc.matchAllAddCursors)
@@ -82,10 +74,8 @@ return {
     set("v", "M", mc.matchCursors)
 
     -- Rotate visual selection contents.
-    set("v", "<leader>t",
-      function() mc.transposeCursors(1) end)
-    set("v", "<leader>T",
-      function() mc.transposeCursors(-1) end)
+    set("v", "<leader>t", function() mc.transposeCursors(1) end)
+    set("v", "<leader>T", function() mc.transposeCursors(-1) end)
 
     -- Jumplist support
     set({ "v", "n" }, "<c-i>", mc.jumpForward)
