@@ -740,7 +740,7 @@ local servers = {
   cssls = {},
   emmet_ls = {},
   graphql = {},
-  ruff_lsp = {},
+  -- ruff = {},
   tailwindcss = {},
   docker_compose_language_service = {},
 
