@@ -182,6 +182,9 @@ return {
       opts.desc = "Format file"
       keymap.set("n", "<leader>L", vim.lsp.buf.format, opts)
 
+      opts.desc = "Organize imports"
+      keymap.set("n", "<C-O>", ":MetalsOrganizeImports<CR>", opts)
+
       opts.desc = "Metals commands"
       keymap.set("n", "<leader>mc", "<cmd>lua require('metals').commands()<CR>", opts)
 
