@@ -461,8 +461,8 @@ keymap.set('n', "<C-n>", "<C-n>zz", { desc = "Half of the page down" })
 
 -- custom functions
 require('custom.functions.switch_case')
-vim.api.nvim_set_keymap('n', 'cs', '<cmd>lua require("custom.functions.switch_case").switch_case()<CR>',
-  { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', 'cs', '<cmd>lua require("custom.functions.switch_case").switch_case()<CR>',
+--   { noremap = true, silent = true })
 
 
 
